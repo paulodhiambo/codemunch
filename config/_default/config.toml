@@ -1,5 +1,7 @@
 # Change baseurl before deploy
-baseurl = " paulodhiambo.github.io/codemunch"
+#baseurl = " paulodhiambo.github.io/codemunch"
+baseURL = ""
+relativeURLs = "True"
 languageCode = "en-us"
 paginate = 5
 title = "Hugo Theme Stack Starter"
