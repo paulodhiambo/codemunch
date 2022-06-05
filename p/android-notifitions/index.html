@@ -1,0 +1,281 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="This tutorial will go over how to create android notifications. A notification is a message widget that is displayed outside the application's user interface"><title>Getting Started with Android Notifications</title><link rel=canonical href=../../p/android-notifitions/><link rel=stylesheet href=../../scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css><meta property="og:title" content="Getting Started with Android Notifications"><meta property="og:description" content="This tutorial will go over how to create android notifications. A notification is a message widget that is displayed outside the application's user interface"><meta property="og:url" content="/p/android-notifitions/"><meta property="og:site_name" content="The Codemunch"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Android"><meta property="article:published_time" content="2022-06-04T00:00:00+00:00"><meta property="article:modified_time" content="2022-06-04T00:00:00+00:00"><meta property="og:image" content="/p/android-notifitions/hero.jpeg"><meta name=twitter:title content="Getting Started with Android Notifications"><meta name=twitter:description content="This tutorial will go over how to create android notifications. A notification is a message widget that is displayed outside the application's user interface"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="/p/android-notifitions/hero.jpeg"></head><body class=article-page><script>(function(){const e='StackColorScheme';localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t='StackColorScheme',e=localStorage.getItem(t),n=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;e=='dark'||e==='auto'&&n?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=../../><img src=../../img/avatar_huda2458f72ce188392d75c5d51cd8e24e_373_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a>
+<span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=../../>The Codemunch</a></h1><h2 class=site-description>Mobile and Backend software development tutorials</h2></div></header><ol class=social-menu><li><a href=https://github.com/paulodhiambo target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com/paulodhiamboh target=_blank title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=../../><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>Home</span></a></li><li><a href=../../archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>Archives</span></a></li><li><a href=../../search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>Search</span></a></li><li><a href=../../links/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg><span>Links</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>Dark Mode</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=../../p/android-notifitions/><img src=../../p/android-notifitions/hero_huf0ddc0edf9c3a783b6694c62278b7f93_32245_800x0_resize_q75_box.jpeg srcset="../../p/android-notifitions/hero_huf0ddc0edf9c3a783b6694c62278b7f93_32245_800x0_resize_q75_box.jpeg 800w, ../../p/android-notifitions/hero_huf0ddc0edf9c3a783b6694c62278b7f93_32245_1600x0_resize_q75_box.jpeg 1600w" width=800 height=600 loading=lazy alt="Featured image of post Getting Started with Android Notifications"></a></div><div class=article-details><header class=article-category><a href=../../categories/android/>Android</a></header><div class=article-title-wrapper><h2 class=article-title><a href=../../p/android-notifitions/>Getting Started with Android Notifications</a></h2><h3 class=article-subtitle>This tutorial will go over how to create android notifications. A notification is a message widget that is displayed outside the application's user interface</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jun 04, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>5 minute read</time></div></footer></div></header><section class=article-content><p>A notification is a message widget that is displayed outside the applications user interface. When a notification is issued, it appears as an icon in the notification area. To view the details of the notification, the user opens the notification drawer.</p><h3 id=android-notifications>Android notifications</h3><h3 id=prerequisites>Prerequisites</h3><p>To follow this tutorial along ensure you have the following:</p><ol><li><a class=link href=https://developer.android.com/studio target=_blank rel=noopener>Android Studio</a> installed on your computer.</li><li>Some knowledge of <a class=link href=https://kotlinlang.org/docs/home.html target=_blank rel=noopener>Kotlin</a> programming language.</li><li>Some knowledge of <a class=link href=https://kotlinlang.org/docs/android-overview.html target=_blank rel=noopener>Android</a> app development.</li></ol><h3 id=application-setup>Application setup</h3><p>Start Android studio and create a new Android project with an empty activity template.</p><p><img src=../../engineering-education/getting-started-android-notifications/android.png loading=lazy alt="Android studio new project"></p><h3 id=creating-and-sending-notifications>Creating and sending notifications</h3><h4 id=basic-notification>Basic notification</h4><ul><li>Create a function with the name <code>basicNotification</code>.</li><li>The function created above should have the code snippets below. The function creates a basic notification with an icon, title, and notification content.</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-Kotlin data-lang=Kotlin><span class=line><span class=cl>    <span class=k>private</span> <span class=k>fun</span> <span class=nf>basicNotification</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>builder</span> <span class=p>=</span> <span class=n>NotificationCompat</span><span class=p>.</span><span class=n>Builder</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>CHANNEL_ID</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setSmallIcon</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>mipmap</span><span class=p>.</span><span class=n>ic_launcher</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentTitle</span><span class=p>(</span><span class=s2>&#34;Test notification&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentText</span><span class=p>(</span><span class=s2>&#34;Test Notification body&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setPriority</span><span class=p>(</span><span class=n>NotificationCompat</span><span class=p>.</span><span class=n>PRIORITY_DEFAULT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>with</span><span class=p>(</span><span class=n>NotificationManagerCompat</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=k>this</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notify</span><span class=p>(</span><span class=n>notificationId</span><span class=p>,</span> <span class=n>builder</span><span class=p>.</span><span class=n>build</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>From the above code snippet:</p><ul><li><code>NotificationCompat.Builder(this, CHANNEL_ID)</code> takes in the context and the channel id. Channel id is required for notifications to work on Android 8.0 and later versions, channel id is used to manage notifications on the later Android versions.</li><li><code>setSmallIcon(R.drawable.notification_icon)</code> sets the notification icon that appears on the notification drawer.</li><li><code>setContentTitle(textTitle)</code> sets the title of the notification that is shown on the notification drawer.</li><li><code>setContentText(textContent)</code> sets the body of the notification.</li><li><code>setPriority(NotificationCompat.PRIORITY_DEFAULT)</code> sets how the Android system will notify the user of the notification based on the priority set, it works on Android 7.0 and below.</li><li>The code snippet below creates and shows the notification in the systems notification drawer.</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>  <span class=n>with</span><span class=p>(</span><span class=n>NotificationManagerCompat</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=k>this</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notify</span><span class=p>(</span><span class=n>notificationId</span><span class=p>,</span> <span class=n>builder</span><span class=p>.</span><span class=n>build</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=pending-intent-notification>Pending intent notification</h4><p>It is possible to add an intent to a notification such that whenever a user clicks on the notification it opens up an activity or fragment from a pending intent.
+To create a notification with a pending intent, create a function with the name <code>pendingNotification</code> in the <code>MainActivity.kt</code> and add the code snippet below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>    <span class=k>private</span> <span class=k>fun</span> <span class=nf>pendingNotification</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>intent</span> <span class=p>=</span> <span class=n>Intent</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>MainActivity</span><span class=o>::</span><span class=k>class</span><span class=p>.</span><span class=n>java</span><span class=p>).</span><span class=n>apply</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>flags</span> <span class=p>=</span> <span class=n>Intent</span><span class=p>.</span><span class=n>FLAG_ACTIVITY_NEW_TASK</span> <span class=n>or</span> <span class=n>Intent</span><span class=p>.</span><span class=n>FLAG_ACTIVITY_CLEAR_TASK</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>pendingIntent</span><span class=p>:</span> <span class=n>PendingIntent</span> <span class=p>=</span> <span class=n>PendingIntent</span><span class=p>.</span><span class=n>getActivity</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>intent</span><span class=p>,</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>builder</span> <span class=p>=</span> <span class=n>NotificationCompat</span><span class=p>.</span><span class=n>Builder</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>CHANNEL_ID</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setSmallIcon</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>mipmap</span><span class=p>.</span><span class=n>ic_launcher</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentTitle</span><span class=p>(</span><span class=s2>&#34;My notification&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentText</span><span class=p>(</span><span class=s2>&#34;Hello World!&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setPriority</span><span class=p>(</span><span class=n>NotificationCompat</span><span class=p>.</span><span class=n>PRIORITY_DEFAULT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentIntent</span><span class=p>(</span><span class=n>pendingIntent</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setAutoCancel</span><span class=p>(</span><span class=k>true</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>with</span><span class=p>(</span><span class=n>NotificationManagerCompat</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=k>this</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notify</span><span class=p>(</span><span class=n>notificationId</span><span class=p>,</span> <span class=n>builder</span><span class=p>.</span><span class=n>build</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>The minor snippet below creates a pending intent that gets executed whenever the notification is clicked.</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl><span class=k>val</span> <span class=py>intent</span> <span class=p>=</span> <span class=n>Intent</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>MainActivity</span><span class=o>::</span><span class=k>class</span><span class=p>.</span><span class=n>java</span><span class=p>).</span><span class=n>apply</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>flags</span> <span class=p>=</span> <span class=n>Intent</span><span class=p>.</span><span class=n>FLAG_ACTIVITY_NEW_TASK</span> <span class=n>or</span> <span class=n>Intent</span><span class=p>.</span><span class=n>FLAG_ACTIVITY_CLEAR_TASK</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><code>.setContentIntent(pendingIntent)</code> attaches the pending intent created to the notification, this makes it possible for the notification to handle the pending intent operation.</li></ul><h4 id=notification-with-action-button>Notification with action button</h4><p>Android system makes it possible to perform certain operations through notification action buttons i.e receive an incoming call, snooze an alarm through the notification buttons.</p><p>Notification actions were introduced with Android version 5.0, that&rsquo;s the reason why we will annotate the function <code>actionNotification</code> with the <code>@RequiresApi(Build.VERSION_CODES.O)</code> annotation.</p><p>Create a function with the name <code>actionNotification</code> and add the code snippets below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>    <span class=nd>@RequiresApi</span><span class=p>(</span><span class=n>Build</span><span class=p>.</span><span class=n>VERSION_CODES</span><span class=p>.</span><span class=n>O</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>private</span> <span class=k>fun</span> <span class=nf>actionsNotification</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>snoozeIntent</span> <span class=p>=</span> <span class=n>Intent</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>MyBroadCastReceiver</span><span class=o>::</span><span class=k>class</span><span class=p>.</span><span class=n>java</span><span class=p>).</span><span class=n>apply</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>action</span> <span class=p>=</span> <span class=s2>&#34;snooze&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=n>putExtra</span><span class=p>(</span><span class=n>EXTRA_NOTIFICATION_ID</span><span class=p>,</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>snoozePendingIntent</span><span class=p>:</span> <span class=n>PendingIntent</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>            <span class=n>PendingIntent</span><span class=p>.</span><span class=n>getBroadcast</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>snoozeIntent</span><span class=p>,</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>val</span> <span class=py>builder</span> <span class=p>=</span> <span class=n>NotificationCompat</span><span class=p>.</span><span class=n>Builder</span><span class=p>(</span><span class=k>this</span><span class=p>,</span> <span class=n>CHANNEL_ID</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setSmallIcon</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>mipmap</span><span class=p>.</span><span class=n>ic_launcher</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentTitle</span><span class=p>(</span><span class=s2>&#34;My notification&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentText</span><span class=p>(</span><span class=s2>&#34;Hello World!&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setPriority</span><span class=p>(</span><span class=n>NotificationCompat</span><span class=p>.</span><span class=n>PRIORITY_DEFAULT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>setContentIntent</span><span class=p>(</span><span class=n>snoozePendingIntent</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>.</span><span class=n>addAction</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>                <span class=n>R</span><span class=p>.</span><span class=n>drawable</span><span class=p>.</span><span class=n>ic_baseline_alarm_off_24</span><span class=p>,</span> <span class=s2>&#34;Snooze&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>snoozePendingIntent</span>
+</span></span><span class=line><span class=cl>            <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>with</span><span class=p>(</span><span class=n>NotificationManagerCompat</span><span class=p>.</span><span class=n>from</span><span class=p>(</span><span class=k>this</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notify</span><span class=p>(</span><span class=n>notificationId</span><span class=p>,</span> <span class=n>builder</span><span class=p>.</span><span class=n>build</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>To perform an action from the notification, we will create a new kotlin class with the name <code>MyBroadCastReceiver</code>. <code>MyBroadCastReceiver</code> class extends the <code>BroadCastReceiver</code> interface and implements the <code>onReceive()</code> method of the <code>BroadCastReceiver</code>interface.</p><h4 id=notification-channel>Notification channel</h4><p>Android version 8.0 and later versions require the notification channel for notification to be displayed on the notifications drawer.</p><p>It is through notification channels that the Android operating system manages notifications. Create a function with the name <code>createNotificationChannel()</code> in the <code>MainActivity</code> and add the code snippets below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl> <span class=k>private</span> <span class=k>fun</span> <span class=nf>createNotificationChannel</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>Build</span><span class=p>.</span><span class=n>VERSION</span><span class=p>.</span><span class=n>SDK_INT</span> <span class=o>&gt;=</span> <span class=n>Build</span><span class=p>.</span><span class=n>VERSION_CODES</span><span class=p>.</span><span class=n>O</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>val</span> <span class=py>name</span> <span class=p>=</span> <span class=s2>&#34;test_notification&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>val</span> <span class=py>descriptionText</span> <span class=p>=</span> <span class=s2>&#34;test_notification_description&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>val</span> <span class=py>importance</span> <span class=p>=</span> <span class=n>NotificationManager</span><span class=p>.</span><span class=n>IMPORTANCE_DEFAULT</span>
+</span></span><span class=line><span class=cl>            <span class=k>val</span> <span class=py>channel</span> <span class=p>=</span> <span class=n>NotificationChannel</span><span class=p>(</span><span class=n>CHANNEL_ID</span><span class=p>,</span> <span class=n>name</span><span class=p>,</span> <span class=n>importance</span><span class=p>).</span><span class=n>apply</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>description</span> <span class=p>=</span> <span class=n>descriptionText</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>val</span> <span class=py>notificationManager</span><span class=p>:</span> <span class=n>NotificationManager</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>                    <span class=n>getSystemService</span><span class=p>(</span><span class=n>Context</span><span class=p>.</span><span class=n>NOTIFICATION_SERVICE</span><span class=p>)</span> <span class=k>as</span> <span class=n>NotificationManager</span>
+</span></span><span class=line><span class=cl>            <span class=n>notificationManager</span><span class=p>.</span><span class=n>createNotificationChannel</span><span class=p>(</span><span class=n>channel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=broadcastreceiver>BroadCastReceiver</h4><p>In the project package, create a kotlin class with the name <code>MyBroadCastReceiver</code> and add the code snippets below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl><span class=k>import</span> <span class=nn>android.content.BroadcastReceiver</span>
+</span></span><span class=line><span class=cl><span class=k>import</span> <span class=nn>android.content.Context</span>
+</span></span><span class=line><span class=cl><span class=k>import</span> <span class=nn>android.content.Intent</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>MyBroadCastReceiver</span> <span class=p>:</span> <span class=n>BroadcastReceiver</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>override</span> <span class=k>fun</span> <span class=nf>onReceive</span><span class=p>(</span><span class=n>context</span><span class=p>:</span> <span class=n>Context</span><span class=p>?,</span> <span class=n>intent</span><span class=p>:</span> <span class=n>Intent</span><span class=p>?)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//Action to be perfomed placed here
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>context</span><span class=o>?.</span><span class=n>startActivity</span><span class=p>(</span><span class=n>intent</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>In the <code>oncreate()</code> function of the <code>MainActivity</code> add the code snippet below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl> <span class=k>override</span> <span class=k>fun</span> <span class=nf>onCreate</span><span class=p>(</span><span class=n>savedInstanceState</span><span class=p>:</span> <span class=n>Bundle</span><span class=p>?)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>super</span><span class=p>.</span><span class=n>onCreate</span><span class=p>(</span><span class=n>savedInstanceState</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>setContentView</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>layout</span><span class=p>.</span><span class=n>activity_main</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>createNotificationChannel</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowNotification</span> <span class=p>=</span> <span class=n>findViewById</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>id</span><span class=p>.</span><span class=n>btnShowNotification</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowPendingNotification</span> <span class=p>=</span> <span class=n>findViewById</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>id</span><span class=p>.</span><span class=n>btnShowPendingNotification</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowActionNotification</span> <span class=p>=</span> <span class=n>findViewById</span><span class=p>(</span><span class=n>R</span><span class=p>.</span><span class=n>id</span><span class=p>.</span><span class=n>btnShowActionNotification</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowNotification</span><span class=p>.</span><span class=n>setOnClickListener</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>basicNotification</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowPendingNotification</span><span class=p>.</span><span class=n>setOnClickListener</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>pendingNotification</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>btnShowActionNotification</span><span class=p>.</span><span class=n>setOnClickListener</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>//Checks the android version
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>if</span> <span class=p>(</span><span class=n>Build</span><span class=p>.</span><span class=n>VERSION</span><span class=p>.</span><span class=n>SDK_INT</span> <span class=o>&gt;=</span> <span class=n>Build</span><span class=p>.</span><span class=n>VERSION_CODES</span><span class=p>.</span><span class=n>O</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>actionsNotification</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=user-interface>User interface</h4><p>In the <code>activity_main.xml</code> file add the code snippet below. There are three buttons in the XML design below. The first button fires up the basic notification, the second button fires up the pending intent notification, and the last button fires the action button notification.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=cp>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;androidx.constraintlayout.widget.ConstraintLayout</span> 
+</span></span><span class=line><span class=cl>    <span class=na>xmlns:android=</span><span class=s>&#34;http://schemas.android.com/apk/res/android&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>xmlns:app=</span><span class=s>&#34;http://schemas.android.com/apk/res-auto&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>xmlns:tools=</span><span class=s>&#34;http://schemas.android.com/tools&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>android:layout_width=</span><span class=s>&#34;match_parent&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>android:layout_height=</span><span class=s>&#34;match_parent&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=na>tools:context=</span><span class=s>&#34;.MainActivity&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Button</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:id=</span><span class=s>&#34;@+id/btnShowNotification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_width=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_height=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:text=</span><span class=s>&#34;Show Basic Notification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintBottom_toTopOf=</span><span class=s>&#34;@+id/btnShowPendingNotification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintEnd_toEndOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintStart_toStartOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintTop_toTopOf=</span><span class=s>&#34;parent&#34;</span> <span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Button</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:id=</span><span class=s>&#34;@+id/btnShowPendingNotification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_width=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_height=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:text=</span><span class=s>&#34;Show Pending Intent Notification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintBottom_toTopOf=</span><span class=s>&#34;@+id/btnShowActionNotification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintEnd_toEndOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintStart_toStartOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintTop_toBottomOf=</span><span class=s>&#34;@+id/btnShowNotification&#34;</span> <span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Button</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:id=</span><span class=s>&#34;@+id/btnShowActionNotification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_width=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:layout_height=</span><span class=s>&#34;wrap_content&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>android:text=</span><span class=s>&#34;Show Action Notification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintBottom_toBottomOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintEnd_toEndOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintStart_toStartOf=</span><span class=s>&#34;parent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>app:layout_constraintTop_toBottomOf=</span><span class=s>&#34;@+id/btnShowPendingNotification&#34;</span> <span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/androidx.constraintlayout.widget.ConstraintLayout&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=conclusion>Conclusion</h3><p>Now that you understand how notifications work, implement a push notification using firebase cloud messaging. Full source code for the application we have built can be downloaded from <a class=link href=https://github.com/paulodhiambo/Notification target=_blank rel=noopener>here</a>.</p><p>To read more on the notification anatomy visit the <a class=link href=https://developer.android.com/guide/topics/ui/notifiers/notifications#Templates target=_blank rel=noopener>Android documentation</a>.</p><p>Happy coding.</p></section><footer class=article-footer><section class=article-tags><a href=../../tags/android/>Android</a></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var t=document,e=t.createElement('script');e.async=!0,e.src='//codemunch.disqus.com/embed.js',e.setAttribute('data-timestamp',+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener('onColorSchemeChange',e=>{DISQUS&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2022 The Codemunch</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.11.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#android-notifications>Android notifications</a></li><li><a href=#prerequisites>Prerequisites</a></li><li><a href=#application-setup>Application setup</a></li><li><a href=#creating-and-sending-notifications>Creating and sending notifications</a><ol><li><a href=#basic-notification>Basic notification</a></li><li><a href=#pending-intent-notification>Pending intent notification</a></li><li><a href=#notification-with-action-button>Notification with action button</a></li><li><a href=#notification-channel>Notification channel</a></li><li><a href=#broadcastreceiver>BroadCastReceiver</a></li><li><a href=#user-interface>User interface</a></li></ol></li><li><a href=#conclusion>Conclusion</a></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=../../ts/main.js defer></script>
+<script>(function(){const e=document.createElement('link');e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

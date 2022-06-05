@@ -1,0 +1,355 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="This tutorial will walk us through how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields `dateCreated` and `lastModified` in the `Todo` data class."><title>Getting started with Spring Data MongoDB in Kotlin</title><link rel=canonical href=../../p/spring-data-mongodb/><link rel=stylesheet href=../../scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css><meta property="og:title" content="Getting started with Spring Data MongoDB in Kotlin"><meta property="og:description" content="This tutorial will walk us through how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields `dateCreated` and `lastModified` in the `Todo` data class."><meta property="og:url" content="/p/spring-data-mongodb/"><meta property="og:site_name" content="The Codemunch"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Spring Boot"><meta property="article:published_time" content="2022-06-05T00:00:00+00:00"><meta property="article:modified_time" content="2022-06-05T00:00:00+00:00"><meta property="og:image" content="/p/spring-data-mongodb/cover.jpeg"><meta name=twitter:title content="Getting started with Spring Data MongoDB in Kotlin"><meta name=twitter:description content="This tutorial will walk us through how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields `dateCreated` and `lastModified` in the `Todo` data class."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="/p/spring-data-mongodb/cover.jpeg"></head><body class=article-page><script>(function(){const e='StackColorScheme';localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t='StackColorScheme',e=localStorage.getItem(t),n=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;e=='dark'||e==='auto'&&n?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=../../><img src=../../img/avatar_huda2458f72ce188392d75c5d51cd8e24e_373_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a>
+<span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=../../>The Codemunch</a></h1><h2 class=site-description>Mobile and Backend software development tutorials</h2></div></header><ol class=social-menu><li><a href=https://github.com/paulodhiambo target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com/paulodhiamboh target=_blank title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=../../><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>Home</span></a></li><li><a href=../../archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>Archives</span></a></li><li><a href=../../search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>Search</span></a></li><li><a href=../../links/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg><span>Links</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>Dark Mode</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=../../p/spring-data-mongodb/><img src=../../p/spring-data-mongodb/cover_hu3716021536e81eaadfcad5b8aa7a543a_90537_800x0_resize_q75_box.jpeg srcset="../../p/spring-data-mongodb/cover_hu3716021536e81eaadfcad5b8aa7a543a_90537_800x0_resize_q75_box.jpeg 800w, ../../p/spring-data-mongodb/cover_hu3716021536e81eaadfcad5b8aa7a543a_90537_1600x0_resize_q75_box.jpeg 1600w" width=800 height=600 loading=lazy alt="Featured image of post Getting started with Spring Data MongoDB in Kotlin"></a></div><div class=article-details><header class=article-category><a href=../../categories/spring-boot/ style=background-color:#2a9d8f;color:#fff>Spring Boot</a></header><div class=article-title-wrapper><h2 class=article-title><a href=../../p/spring-data-mongodb/>Getting started with Spring Data MongoDB in Kotlin</a></h2><h3 class=article-subtitle>This tutorial will walk us through how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields `dateCreated` and `lastModified` in the `Todo` data class.</h3></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jun 05, 2022</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>5 minute read</time></div></footer></div></header><section class=article-content><p>Spring Data MongoDB makes it possible to integrate a Spring Boot application with Mongo document database. It provides a <code>MongoRepository</code> containing all the methods used to perform MongoDB CRUD operations.</p><p>Before we begin, we will need the following:</p><h3 id=prerequisites>Prerequisites</h3><ol><li><p><a class=link href=https://www.oracle.com/java/technologies/javase-jdk15-downloads.html target=_blank rel=noopener>JDK</a> installed on your computer.</p></li><li><p>Your favorite IDE. I&rsquo;ll be using <a class=link href=https://www.jetbrains.com/idea/download/download-thanks.html target=_blank rel=noopener>Intellij IDEA</a> community edition.</p></li><li><p>Some knowledge of <a class=link href=https://www.javatpoint.com/java-tutorial target=_blank rel=noopener>Java</a> and <a class=link href=https://spring.io/projects/spring-boot target=_blank rel=noopener>Spring Boot</a>.</p></li><li><p><a class=link href=https://www.mongodb.com/try/download/community target=_blank rel=noopener>MongoDB</a> installed on your computer.</p></li></ol><h3 id=mongodb-terminology>MongoDB terminology</h3><ul><li><strong>Database</strong> is a container for collections and can be thought of as a RDBMS database, which is a container for Tables.</li><li><strong>Collection</strong> is equivalent to Tables in RDBMS, but unlike a table, it has a dynamic schema. A collection exists within a database.</li><li><strong>Document</strong> is a single record in a MongoDB collection. It can be thought of as a row in RDBMS.</li><li><strong>Field</strong> this is a document that has zero or more fields. It&rsquo;s like an RDBMS column having a key-value pair.</li><li><strong>Embedded document</strong> is an efficient and clean way to store related data, especially data that are regularly accessed together.</li><li><strong>Primary key</strong> uniquely identifies a document.</li></ul><h3 id=creating-application>Creating application</h3><p>We will be using <a class=link href=https://start.spring.io/ target=_blank rel=noopener>spring initializr</a> to create our application.</p><ol><li><p>Open <a class=link href=https://start.spring.io/ target=_blank rel=noopener>Spring initializr</a> in your browser.</p></li><li><p>Select language to Kotlin.</p></li><li><p>Add <code>Spring Web</code>, <code>Spring Data MongoDB</code>, dependencies.</p></li><li><p>Leave other configurations as default and click on generate the project.</p></li><li><p>Unzip the downloaded project and open it in your favorite IDE. I&rsquo;ll be using <a class=link href="https://www.jetbrains.com/idea/download/#section=linux" target=_blank rel=noopener>Intelij IDEA community</a>, which is available for free.</p></li><li><p>Sync the project with maven to download all the dependencies.</p></li></ol><h3 id=domain-layer>Domain layer</h3><p>In the root package of our application, create a package named <code>domain</code>.</p><p>Create a Kotlin file named <code>Todo.kt</code> in the domain package we have created above and add the code snippet below into the file.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>import</span> <span class=nn>org.springframework.data.annotation.Id</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>import</span> <span class=nn>org.springframework.data.mongodb.core.mapping.Document</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@Document</span><span class=p>(</span><span class=n>collection</span> <span class=p>=</span> <span class=s2>&#34;todo&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>data</span> <span class=k>class</span> <span class=nc>Todo</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=nd>@Id</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>val</span> <span class=py>id</span><span class=p>:</span> <span class=n>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>var</span> <span class=py>title</span><span class=p>:</span> <span class=n>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>var</span> <span class=py>description</span><span class=p>:</span> <span class=n>String</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>var</span> <span class=py>isCompleted</span><span class=p>:</span> <span class=n>Boolean</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><p><code>@Document(collection = "todo")</code> annotation marks the <code>Todo</code> data class as a MongoDB document that will be stored under the <code>todo</code> collection.</p></li><li><p><code>@Id</code> marks the <code>id</code> field as a unique object id in the MongoDB collection.</p></li></ul><h3 id=controller-layer>Controller layer</h3><p>In the root package of our application, create a package named <code>controllers</code>.</p><p>Create a Kotlin file named <code>TodoController.kt</code> and add the code snippet below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@RestController</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@RequestMapping</span><span class=p>(</span><span class=s2>&#34;/api/v1/todos/&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@CrossOrigin</span><span class=p>(</span><span class=s2>&#34;*&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>TodoController</span><span class=p>(</span><span class=k>val</span> <span class=py>todoService</span><span class=p>:</span> <span class=n>TodoService</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=c1>//Get all todos in the database
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>   <span class=nd>@GetMapping</span><span class=p>(</span><span class=s2>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>getAllTodos</span><span class=p>():</span> <span class=n>ResponseEntity</span><span class=p>&lt;</span><span class=n>List</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>ResponseEntity</span><span class=p>(</span><span class=n>todoService</span><span class=p>.</span><span class=n>getTodos</span><span class=p>(),</span> <span class=n>HttpStatus</span><span class=p>.</span><span class=n>OK</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=c1>//Get Todo from the database by id
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>   <span class=nd>@GetMapping</span><span class=p>(</span><span class=s2>&#34;/{id}&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>getTodoById</span><span class=p>(</span><span class=nd>@PathVariable</span><span class=p>(</span><span class=s2>&#34;id&#34;</span><span class=p>)</span> <span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>):</span> <span class=n>ResponseEntity</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>ResponseEntity</span><span class=p>(</span><span class=n>todoService</span><span class=p>.</span><span class=n>getTodoById</span><span class=p>(</span><span class=n>id</span><span class=p>),</span> <span class=n>HttpStatus</span><span class=p>.</span><span class=n>OK</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=c1>//save a todo into the database
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>   <span class=nd>@PostMapping</span><span class=p>(</span><span class=s2>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>saveTodo</span><span class=p>(</span><span class=nd>@RequestBody</span> <span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>):</span> <span class=n>ResponseEntity</span><span class=p>&lt;</span><span class=n>Any</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>ResponseEntity</span><span class=p>(</span><span class=n>todoService</span><span class=p>.</span><span class=n>saveTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>),</span> <span class=n>HttpStatus</span><span class=p>.</span><span class=n>CREATED</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=c1>//update todo
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>   <span class=nd>@PutMapping</span><span class=p>(</span><span class=s2>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>updateTodo</span><span class=p>(</span><span class=nd>@RequestBody</span> <span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>):</span> <span class=n>ResponseEntity</span><span class=p>&lt;</span><span class=n>Any</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>ResponseEntity</span><span class=p>(</span><span class=n>todoService</span><span class=p>.</span><span class=n>updateTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>),</span> <span class=n>HttpStatus</span><span class=p>.</span><span class=n>OK</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=c1>//delete todo
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>   <span class=nd>@DeleteMapping</span><span class=p>(</span><span class=s2>&#34;/{id}&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>deleteTodo</span><span class=p>(</span><span class=nd>@PathVariable</span><span class=p>(</span><span class=s2>&#34;id&#34;</span><span class=p>)</span> <span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>):</span> <span class=n>ResponseEntity</span><span class=p>&lt;</span><span class=n>Any</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>ResponseEntity</span><span class=p>(</span><span class=n>todoService</span><span class=p>.</span><span class=n>deleteTodo</span><span class=p>(</span><span class=n>id</span><span class=p>),</span> <span class=n>HttpStatus</span><span class=p>.</span><span class=n>NO_CONTENT</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><p><code>@CrossOrigin</code> annotation configures the allowed origins. It is also known as <code>cors</code>, <code>cors</code> allows applications to run on different domains to communicate.</p></li><li><p><code>@RestController</code> annotation defines a controller and indicates that the return value of the methods should be bound to the web response body.</p></li><li><p><code>@RequestMapping</code> declares that all APIs URL in the controller will start with <code>/api/v1/todos/</code>.</p></li></ul><h3 id=repository-layer>Repository layer</h3><p>In the root package of our application create a package named <code>repository</code> and create a Kotlin file named <code>TodoRepository.kt</code> within the <code>repository</code> package, add the code snippet below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>interface</span> <span class=nc>TodoRepository</span> <span class=p>:</span> <span class=n>MongoRepository</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>,</span> <span class=n>String</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><code>interface TodoRepository</code> extends the <code>MongoRepository</code> interface that contains all the CRUD functions that we are going to use to query our MongoDB collection.</li></ul><h3 id=service-layer>Service layer</h3><p>In the root project package, create a package named <code>service</code> and add two Kotlin files <code>TodoService.kt</code>, <code>TodoServiceImpl</code> with the code snippets below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>interface</span> <span class=nc>TodoService</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>saveTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>getTodos</span><span class=p>():</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>getTodoById</span><span class=p>(</span><span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>):</span> <span class=n>Todo</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>deleteTodo</span><span class=p>(</span><span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>fun</span> <span class=nf>updateTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-kotlin data-lang=kotlin><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@Service</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>TodoServiceImpl</span><span class=p>(</span><span class=k>val</span> <span class=py>todoRepository</span><span class=p>:</span> <span class=n>TodoRepository</span><span class=p>)</span> <span class=p>:</span> <span class=n>TodoService</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>override</span> <span class=k>fun</span> <span class=nf>saveTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=n>todoRepository</span><span class=p>.</span><span class=n>save</span><span class=p>(</span><span class=n>todo</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>override</span> <span class=k>fun</span> <span class=nf>getTodos</span><span class=p>():</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>return</span> <span class=n>todoRepository</span><span class=p>.</span><span class=n>findAll</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>override</span> <span class=k>fun</span> <span class=nf>getTodoById</span><span class=p>(</span><span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>):</span> <span class=n>Todo</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>val</span> <span class=py>todoQueried</span><span class=p>:</span> <span class=n>Optional</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;</span> <span class=p>=</span> <span class=n>todoRepository</span><span class=p>.</span><span class=n>findById</span><span class=p>(</span><span class=n>id</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>if</span> <span class=p>(</span><span class=n>todoQueried</span><span class=p>.</span><span class=n>isPresent</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=k>return</span> <span class=n>todoQueried</span><span class=p>.</span><span class=k>get</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=k>throw</span> <span class=n>IllegalStateException</span><span class=p>(</span><span class=s2>&#34;Todo with id </span><span class=si>$id</span><span class=s2> not found&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>override</span> <span class=k>fun</span> <span class=nf>deleteTodo</span><span class=p>(</span><span class=n>id</span><span class=p>:</span> <span class=n>String</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=n>todoRepository</span><span class=p>.</span><span class=n>deleteById</span><span class=p>(</span><span class=n>id</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=k>override</span> <span class=k>fun</span> <span class=nf>updateTodo</span><span class=p>(</span><span class=n>todo</span><span class=p>:</span> <span class=n>Todo</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>val</span> <span class=py>todoQueried</span><span class=p>:</span> <span class=n>Optional</span><span class=p>&lt;</span><span class=n>Todo</span><span class=p>&gt;</span> <span class=p>=</span> <span class=n>todoRepository</span><span class=p>.</span><span class=n>findById</span><span class=p>(</span><span class=n>todo</span><span class=p>.</span><span class=n>id</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=k>if</span> <span class=p>(</span><span class=n>todoQueried</span><span class=p>.</span><span class=n>isPresent</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=k>val</span> <span class=py>_todo</span> <span class=p>=</span> <span class=n>todoQueried</span><span class=p>.</span><span class=k>get</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=n>_todo</span><span class=p>.</span><span class=n>description</span> <span class=p>=</span> <span class=n>todo</span><span class=p>.</span><span class=n>description</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=n>_todo</span><span class=p>.</span><span class=n>isCompleted</span> <span class=p>=</span> <span class=n>todo</span><span class=p>.</span><span class=n>isCompleted</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=n>_todo</span><span class=p>.</span><span class=n>title</span> <span class=p>=</span> <span class=n>todo</span><span class=p>.</span><span class=n>title</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=n>todoRepository</span><span class=p>.</span><span class=n>save</span><span class=p>(</span><span class=n>_todo</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>           <span class=k>throw</span> <span class=n>IllegalStateException</span><span class=p>(</span><span class=s2>&#34;Todo with id </span><span class=si>${todo.id}</span><span class=s2> is not found&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=configurations>Configurations</h3><p><strong>Connecting to MongoDB locally</strong>
+In the resources directory, open the <code>application.properties</code> file in your IDE and add the configurations below.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>spring.data.mongodb.database=todo_db</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=l>spring.data.mongodb.port=27017</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><ul><li><p><code>spring.data.mongodb.database=todo_db</code> indicates that our database name is <code>todo_db</code>.</p></li><li><p><code>spring.data.mongodb.port=27017</code> indicates that we will be connecting to mongodb through port <code>27017</code>.</p></li></ul><p><strong>Connecting to Mongo Atlas</strong></p><ol><li><p>Visit <a class=link href=https://account.mongodb.com/account/login target=_blank rel=noopener>Mongo Atlas</a> and create an account.</p></li><li><p>Click on the <code>Database Access</code> side menu and add a database user.</p></li></ol><p><img src=../../p/spring-data-mongodb/mongo-atlas-create-user.png width=600 height=392 srcset="../../p/spring-data-mongodb/mongo-atlas-create-user_hu4b5fcdad9f36c3c97e7e0f74b27ad58e_70451_480x0_resize_box_3.png 480w, ../../p/spring-data-mongodb/mongo-atlas-create-user_hu4b5fcdad9f36c3c97e7e0f74b27ad58e_70451_1024x0_resize_box_3.png 1024w" loading=lazy alt="Mongo Atlas database user" class=gallery-image data-flex-grow=153 data-flex-basis=367px></p><ol start=3><li>Click on the <code>Cluster</code> side menu and create a database.</li></ol><p><img src=../../p/spring-data-mongodb/mongo-db-collection.png width=600 height=407 srcset="../../p/spring-data-mongodb/mongo-db-collection_hu277ee61270d52fa1240fe66e52b750db_48702_480x0_resize_box_3.png 480w, ../../p/spring-data-mongodb/mongo-db-collection_hu277ee61270d52fa1240fe66e52b750db_48702_1024x0_resize_box_3.png 1024w" loading=lazy alt="Mongo Atlas create database" class=gallery-image data-flex-grow=147 data-flex-basis=353px></p><ol start=4><li>On the <code>Cluster</code> side menu, click on <code>connect</code> and select the connection method as <code>connect your application</code>. Copy the connection string.</li></ol><p><img src=../../p/spring-data-mongodb/mongo-db-connection-string.png width=600 height=370 srcset="../../p/spring-data-mongodb/mongo-db-connection-string_hu485e9b56363a63b52f221cc240d07c6c_55852_480x0_resize_box_3.png 480w, ../../p/spring-data-mongodb/mongo-db-connection-string_hu485e9b56363a63b52f221cc240d07c6c_55852_1024x0_resize_box_3.png 1024w" loading=lazy alt="Mongo Atlas connection string" class=gallery-image data-flex-grow=162 data-flex-basis=389px></p><ol start=5><li>Add configurations below to the <code>application.properties</code> file.</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>   </span><span class=c>#spring.data.mongodb.database=todo_db</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>   </span><span class=c>#spring.data.mongodb.port=27017</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>   </span><span class=l>spring.data.mongodb.uri=mongodb+srv://&lt;username&gt;:&lt;password&gt;@cluster0.vlohf.mongodb.net/&lt;database&gt;?retryWrites=true&amp;w=majority</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><ul><li>Change <code>&lt;username></code>, <code>&lt;password></code>, and <code>&lt;database></code> to the credentials you have created in Mongo Atlas.</li></ul><h3 id=conclusion>Conclusion</h3><p>You have now learned how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields <code>dateCreated</code> and <code>lastModified</code> in the <code>Todo</code> data class.</p><p>You can find the source code <a class=link href=https://github.com/paulodhiambo/mongodb target=_blank rel=noopener>here</a>.</p><p>Happy coding.</p></section><footer class=article-footer><section class=article-tags><a href=../../tags/spring-boot/>Spring Boot</a></section></footer></article><div class=disqus-container><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var t=document,e=t.createElement('script');e.async=!0,e.src='//codemunch.disqus.com/embed.js',e.setAttribute('data-timestamp',+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener('onColorSchemeChange',e=>{DISQUS&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2022 The Codemunch</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.11.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><a href=#prerequisites>Prerequisites</a></li><li><a href=#mongodb-terminology>MongoDB terminology</a></li><li><a href=#creating-application>Creating application</a></li><li><a href=#domain-layer>Domain layer</a></li><li><a href=#controller-layer>Controller layer</a></li><li><a href=#repository-layer>Repository layer</a></li><li><a href=#service-layer>Service layer</a></li><li><a href=#configurations>Configurations</a></li><li><a href=#conclusion>Conclusion</a></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=../../ts/main.js defer></script>
+<script>(function(){const e=document.createElement('link');e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

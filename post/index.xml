@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on The Codemunch</title><link>/post/</link><description>Recent content in Posts on The Codemunch</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 05 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with Spring Data MongoDB in Kotlin</title><link>/p/spring-data-mongodb/</link><pubDate>Sun, 05 Jun 2022 00:00:00 +0000</pubDate><guid>/p/spring-data-mongodb/</guid><description>&lt;img src="/p/spring-data-mongodb/cover.jpeg" alt="Featured image of post Getting started with Spring Data MongoDB in Kotlin" />&lt;p>Spring Data MongoDB makes it possible to integrate a Spring Boot application with Mongo document database. It provides a &lt;code>MongoRepository&lt;/code> containing all the methods used to perform MongoDB CRUD operations.&lt;/p>
+&lt;p>Before we begin, we will need the following:&lt;/p>
+&lt;h3 id="prerequisites">Prerequisites&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.oracle.com/java/technologies/javase-jdk15-downloads.html" target="_blank" rel="noopener"
+>JDK&lt;/a> installed on your computer.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Your favorite IDE. I&amp;rsquo;ll be using &lt;a class="link" href="https://www.jetbrains.com/idea/download/download-thanks.html" target="_blank" rel="noopener"
+>Intellij IDEA&lt;/a> community edition.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Some knowledge of &lt;a class="link" href="https://www.javatpoint.com/java-tutorial" target="_blank" rel="noopener"
+>Java&lt;/a> and &lt;a class="link" href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener"
+>Spring Boot&lt;/a>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.mongodb.com/try/download/community" target="_blank" rel="noopener"
+>MongoDB&lt;/a> installed on your computer.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="mongodb-terminology">MongoDB terminology&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>Database&lt;/strong> is a container for collections and can be thought of as a RDBMS database, which is a container for Tables.&lt;/li>
+&lt;li>&lt;strong>Collection&lt;/strong> is equivalent to Tables in RDBMS, but unlike a table, it has a dynamic schema. A collection exists within a database.&lt;/li>
+&lt;li>&lt;strong>Document&lt;/strong> is a single record in a MongoDB collection. It can be thought of as a row in RDBMS.&lt;/li>
+&lt;li>&lt;strong>Field&lt;/strong> this is a document that has zero or more fields. It&amp;rsquo;s like an RDBMS column having a key-value pair.&lt;/li>
+&lt;li>&lt;strong>Embedded document&lt;/strong> is an efficient and clean way to store related data, especially data that are regularly accessed together.&lt;/li>
+&lt;li>&lt;strong>Primary key&lt;/strong> uniquely identifies a document.&lt;/li>
+&lt;/ul>
+&lt;h3 id="creating-application">Creating application&lt;/h3>
+&lt;p>We will be using &lt;a class="link" href="https://start.spring.io/" target="_blank" rel="noopener"
+>spring initializr&lt;/a> to create our application.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Open &lt;a class="link" href="https://start.spring.io/" target="_blank" rel="noopener"
+>Spring initializr&lt;/a> in your browser.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Select language to Kotlin.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Add &lt;code>Spring Web&lt;/code>, &lt;code>Spring Data MongoDB&lt;/code>, dependencies.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Leave other configurations as default and click on generate the project.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Unzip the downloaded project and open it in your favorite IDE. I&amp;rsquo;ll be using &lt;a class="link" href="https://www.jetbrains.com/idea/download/#section=linux" target="_blank" rel="noopener"
+>Intelij IDEA community&lt;/a>, which is available for free.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Sync the project with maven to download all the dependencies.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="domain-layer">Domain layer&lt;/h3>
+&lt;p>In the root package of our application, create a package named &lt;code>domain&lt;/code>.&lt;/p>
+&lt;p>Create a Kotlin file named &lt;code>Todo.kt&lt;/code> in the domain package we have created above and add the code snippet below into the file.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">org.springframework.data.annotation.Id&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">org.springframework.data.mongodb.core.mapping.Document&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Document&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">collection&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;todo&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">data&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">Todo&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Id&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">var&lt;/span> &lt;span class="py">title&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">var&lt;/span> &lt;span class="py">description&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">var&lt;/span> &lt;span class="py">isCompleted&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Boolean&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>@Document(collection = &amp;quot;todo&amp;quot;)&lt;/code> annotation marks the &lt;code>Todo&lt;/code> data class as a MongoDB document that will be stored under the &lt;code>todo&lt;/code> collection.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>@Id&lt;/code> marks the &lt;code>id&lt;/code> field as a unique object id in the MongoDB collection.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="controller-layer">Controller layer&lt;/h3>
+&lt;p>In the root package of our application, create a package named &lt;code>controllers&lt;/code>.&lt;/p>
+&lt;p>Create a Kotlin file named &lt;code>TodoController.kt&lt;/code> and add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@RestController&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@RequestMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/api/v1/todos/&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@CrossOrigin&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">TodoController&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">val&lt;/span> &lt;span class="py">todoService&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">TodoService&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Get all todos in the database
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@GetMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getAllTodos&lt;/span>&lt;span class="p">():&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todoService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getTodos&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="n">HttpStatus&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">OK&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Get Todo from the database by id
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@GetMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/{id}&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getTodoById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@PathVariable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todoService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getTodoById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">HttpStatus&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">OK&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//save a todo into the database
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@PostMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">saveTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@RequestBody&lt;/span> &lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Any&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todoService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">saveTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">HttpStatus&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CREATED&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//update todo
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@PutMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">updateTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@RequestBody&lt;/span> &lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Any&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todoService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">updateTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">HttpStatus&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">OK&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//delete todo
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@DeleteMapping&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;/{id}&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">deleteTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nd">@PathVariable&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Any&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">ResponseEntity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todoService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">deleteTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">HttpStatus&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NO_CONTENT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>@CrossOrigin&lt;/code> annotation configures the allowed origins. It is also known as &lt;code>cors&lt;/code>, &lt;code>cors&lt;/code> allows applications to run on different domains to communicate.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>@RestController&lt;/code> annotation defines a controller and indicates that the return value of the methods should be bound to the web response body.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>@RequestMapping&lt;/code> declares that all APIs URL in the controller will start with &lt;code>/api/v1/todos/&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="repository-layer">Repository layer&lt;/h3>
+&lt;p>In the root package of our application create a package named &lt;code>repository&lt;/code> and create a Kotlin file named &lt;code>TodoRepository.kt&lt;/code> within the &lt;code>repository&lt;/code> package, add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">interface&lt;/span> &lt;span class="nc">TodoRepository&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">MongoRepository&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>interface TodoRepository&lt;/code> extends the &lt;code>MongoRepository&lt;/code> interface that contains all the CRUD functions that we are going to use to query our MongoDB collection.&lt;/li>
+&lt;/ul>
+&lt;h3 id="service-layer">Service layer&lt;/h3>
+&lt;p>In the root project package, create a package named &lt;code>service&lt;/code> and add two Kotlin files &lt;code>TodoService.kt&lt;/code>, &lt;code>TodoServiceImpl&lt;/code> with the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">interface&lt;/span> &lt;span class="nc">TodoService&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">saveTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getTodos&lt;/span>&lt;span class="p">():&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getTodoById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">Todo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">deleteTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fun&lt;/span> &lt;span class="nf">updateTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">TodoServiceImpl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">val&lt;/span> &lt;span class="py">todoRepository&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">TodoRepository&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">TodoService&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">saveTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">save&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getTodos&lt;/span>&lt;span class="p">():&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">findAll&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">getTodoById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">):&lt;/span> &lt;span class="n">Todo&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">todoQueried&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Optional&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">todoQueried&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">isPresent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">todoQueried&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="k">get&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="n">IllegalStateException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Todo with id &lt;/span>&lt;span class="si">$id&lt;/span>&lt;span class="s2"> not found&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">deleteTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">deleteById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">updateTodo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Todo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">todoQueried&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Optional&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Todo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">findById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">todoQueried&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">isPresent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">_todo&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todoQueried&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="k">get&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">description&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">isCompleted&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">isCompleted&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">title&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">todo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">title&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">todoRepository&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">save&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_todo&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="n">IllegalStateException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Todo with id &lt;/span>&lt;span class="si">${todo.id}&lt;/span>&lt;span class="s2"> is not found&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="configurations">Configurations&lt;/h3>
+&lt;p>&lt;strong>Connecting to MongoDB locally&lt;/strong>
+In the resources directory, open the &lt;code>application.properties&lt;/code> file in your IDE and add the configurations below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">spring.data.mongodb.database=todo_db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="l">spring.data.mongodb.port=27017&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>spring.data.mongodb.database=todo_db&lt;/code> indicates that our database name is &lt;code>todo_db&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>spring.data.mongodb.port=27017&lt;/code> indicates that we will be connecting to mongodb through port &lt;code>27017&lt;/code>.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Connecting to Mongo Atlas&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>Visit &lt;a class="link" href="https://account.mongodb.com/account/login" target="_blank" rel="noopener"
+>Mongo Atlas&lt;/a> and create an account.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Click on the &lt;code>Database Access&lt;/code> side menu and add a database user.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="../p/spring-data-mongodb/mongo-atlas-create-user.png"
+width="600"
+height="392"
+srcset="../p/spring-data-mongodb/mongo-atlas-create-user_hu4b5fcdad9f36c3c97e7e0f74b27ad58e_70451_480x0_resize_box_3.png 480w, ../p/spring-data-mongodb/mongo-atlas-create-user_hu4b5fcdad9f36c3c97e7e0f74b27ad58e_70451_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Mongo Atlas database user"
+class="gallery-image"
+data-flex-grow="153"
+data-flex-basis="367px"
+>&lt;/p>
+&lt;ol start="3">
+&lt;li>Click on the &lt;code>Cluster&lt;/code> side menu and create a database.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="../p/spring-data-mongodb/mongo-db-collection.png"
+width="600"
+height="407"
+srcset="../p/spring-data-mongodb/mongo-db-collection_hu277ee61270d52fa1240fe66e52b750db_48702_480x0_resize_box_3.png 480w, ../p/spring-data-mongodb/mongo-db-collection_hu277ee61270d52fa1240fe66e52b750db_48702_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Mongo Atlas create database"
+class="gallery-image"
+data-flex-grow="147"
+data-flex-basis="353px"
+>&lt;/p>
+&lt;ol start="4">
+&lt;li>On the &lt;code>Cluster&lt;/code> side menu, click on &lt;code>connect&lt;/code> and select the connection method as &lt;code>connect your application&lt;/code>. Copy the connection string.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="../p/spring-data-mongodb/mongo-db-connection-string.png"
+width="600"
+height="370"
+srcset="../p/spring-data-mongodb/mongo-db-connection-string_hu485e9b56363a63b52f221cc240d07c6c_55852_480x0_resize_box_3.png 480w, ../p/spring-data-mongodb/mongo-db-connection-string_hu485e9b56363a63b52f221cc240d07c6c_55852_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Mongo Atlas connection string"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="389px"
+>&lt;/p>
+&lt;ol start="5">
+&lt;li>Add configurations below to the &lt;code>application.properties&lt;/code> file.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c">#spring.data.mongodb.database=todo_db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c">#spring.data.mongodb.port=27017&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="l">spring.data.mongodb.uri=mongodb+srv://&amp;lt;username&amp;gt;:&amp;lt;password&amp;gt;@cluster0.vlohf.mongodb.net/&amp;lt;database&amp;gt;?retryWrites=true&amp;amp;w=majority&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>Change &lt;code>&amp;lt;username&amp;gt;&lt;/code>, &lt;code>&amp;lt;password&amp;gt;&lt;/code>, and &lt;code>&amp;lt;database&amp;gt;&lt;/code> to the credentials you have created in Mongo Atlas.&lt;/li>
+&lt;/ul>
+&lt;h3 id="conclusion">Conclusion&lt;/h3>
+&lt;p>You have now learned how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields &lt;code>dateCreated&lt;/code> and &lt;code>lastModified&lt;/code> in the &lt;code>Todo&lt;/code> data class.&lt;/p>
+&lt;p>You can find the source code &lt;a class="link" href="https://github.com/paulodhiambo/mongodb" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;p>Happy coding.&lt;/p></description></item><item><title>Getting Started with Android Notifications</title><link>/p/android-notifitions/</link><pubDate>Sat, 04 Jun 2022 00:00:00 +0000</pubDate><guid>/p/android-notifitions/</guid><description>&lt;img src="/p/android-notifitions/hero.jpeg" alt="Featured image of post Getting Started with Android Notifications" />&lt;p>A notification is a message widget that is displayed outside the applications user interface. When a notification is issued, it appears as an icon in the notification area. To view the details of the notification, the user opens the notification drawer.&lt;/p>
+&lt;h3 id="android-notifications">Android notifications&lt;/h3>
+&lt;h3 id="prerequisites">Prerequisites&lt;/h3>
+&lt;p>To follow this tutorial along ensure you have the following:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://developer.android.com/studio" target="_blank" rel="noopener"
+>Android Studio&lt;/a> installed on your computer.&lt;/li>
+&lt;li>Some knowledge of &lt;a class="link" href="https://kotlinlang.org/docs/home.html" target="_blank" rel="noopener"
+>Kotlin&lt;/a> programming language.&lt;/li>
+&lt;li>Some knowledge of &lt;a class="link" href="https://kotlinlang.org/docs/android-overview.html" target="_blank" rel="noopener"
+>Android&lt;/a> app development.&lt;/li>
+&lt;/ol>
+&lt;h3 id="application-setup">Application setup&lt;/h3>
+&lt;p>Start Android studio and create a new Android project with an empty activity template.&lt;/p>
+&lt;p>&lt;img src="../engineering-education/getting-started-android-notifications/android.png"
+loading="lazy"
+alt="Android studio new project"
+>&lt;/p>
+&lt;h3 id="creating-and-sending-notifications">Creating and sending notifications&lt;/h3>
+&lt;h4 id="basic-notification">Basic notification&lt;/h4>
+&lt;ul>
+&lt;li>Create a function with the name &lt;code>basicNotification&lt;/code>.&lt;/li>
+&lt;li>The function created above should have the code snippets below. The function creates a basic notification with an icon, title, and notification content.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-Kotlin" data-lang="Kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">basicNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Test notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Test Notification body&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>From the above code snippet:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>NotificationCompat.Builder(this, CHANNEL_ID)&lt;/code> takes in the context and the channel id. Channel id is required for notifications to work on Android 8.0 and later versions, channel id is used to manage notifications on the later Android versions.&lt;/li>
+&lt;li>&lt;code>setSmallIcon(R.drawable.notification_icon)&lt;/code> sets the notification icon that appears on the notification drawer.&lt;/li>
+&lt;li>&lt;code>setContentTitle(textTitle)&lt;/code> sets the title of the notification that is shown on the notification drawer.&lt;/li>
+&lt;li>&lt;code>setContentText(textContent)&lt;/code> sets the body of the notification.&lt;/li>
+&lt;li>&lt;code>setPriority(NotificationCompat.PRIORITY_DEFAULT)&lt;/code> sets how the Android system will notify the user of the notification based on the priority set, it works on Android 7.0 and below.&lt;/li>
+&lt;li>The code snippet below creates and shows the notification in the systems notification drawer.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="pending-intent-notification">Pending intent notification&lt;/h4>
+&lt;p>It is possible to add an intent to a notification such that whenever a user clicks on the notification it opens up an activity or fragment from a pending intent.
+To create a notification with a pending intent, create a function with the name &lt;code>pendingNotification&lt;/code> in the &lt;code>MainActivity.kt&lt;/code> and add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">pendingNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">intent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MainActivity&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">flags&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_NEW_TASK&lt;/span> &lt;span class="n">or&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_CLEAR_TASK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">pendingIntent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">PendingIntent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">PendingIntent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getActivity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">intent&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;My notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello World!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentIntent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pendingIntent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setAutoCancel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">true&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>The minor snippet below creates a pending intent that gets executed whenever the notification is clicked.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">&lt;span class="k">val&lt;/span> &lt;span class="py">intent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MainActivity&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">flags&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_NEW_TASK&lt;/span> &lt;span class="n">or&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_CLEAR_TASK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>.setContentIntent(pendingIntent)&lt;/code> attaches the pending intent created to the notification, this makes it possible for the notification to handle the pending intent operation.&lt;/li>
+&lt;/ul>
+&lt;h4 id="notification-with-action-button">Notification with action button&lt;/h4>
+&lt;p>Android system makes it possible to perform certain operations through notification action buttons i.e receive an incoming call, snooze an alarm through the notification buttons.&lt;/p>
+&lt;p>Notification actions were introduced with Android version 5.0, that&amp;rsquo;s the reason why we will annotate the function &lt;code>actionNotification&lt;/code> with the &lt;code>@RequiresApi(Build.VERSION_CODES.O)&lt;/code> annotation.&lt;/p>
+&lt;p>Create a function with the name &lt;code>actionNotification&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@RequiresApi&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">actionsNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">snoozeIntent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MyBroadCastReceiver&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">action&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;snooze&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">putExtra&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EXTRA_NOTIFICATION_ID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">snoozePendingIntent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">PendingIntent&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">PendingIntent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getBroadcast&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">snoozeIntent&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;My notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello World!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentIntent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">snoozePendingIntent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">addAction&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">drawable&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_baseline_alarm_off_24&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Snooze&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">snoozePendingIntent&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>To perform an action from the notification, we will create a new kotlin class with the name &lt;code>MyBroadCastReceiver&lt;/code>. &lt;code>MyBroadCastReceiver&lt;/code> class extends the &lt;code>BroadCastReceiver&lt;/code> interface and implements the &lt;code>onReceive()&lt;/code> method of the &lt;code>BroadCastReceiver&lt;/code>interface.&lt;/p>
+&lt;h4 id="notification-channel">Notification channel&lt;/h4>
+&lt;p>Android version 8.0 and later versions require the notification channel for notification to be displayed on the notifications drawer.&lt;/p>
+&lt;p>It is through notification channels that the Android operating system manages notifications. Create a function with the name &lt;code>createNotificationChannel()&lt;/code> in the &lt;code>MainActivity&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">createNotificationChannel&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SDK_INT&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">name&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;test_notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">descriptionText&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;test_notification_description&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">importance&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IMPORTANCE_DEFAULT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">channel&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationChannel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">importance&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">descriptionText&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">notificationManager&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">NotificationManager&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">getSystemService&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Context&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NOTIFICATION_SERVICE&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">NotificationManager&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notificationManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">createNotificationChannel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">channel&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="broadcastreceiver">BroadCastReceiver&lt;/h4>
+&lt;p>In the project package, create a kotlin class with the name &lt;code>MyBroadCastReceiver&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.BroadcastReceiver&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.Context&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.Intent&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">MyBroadCastReceiver&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">BroadcastReceiver&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">onReceive&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Context&lt;/span>&lt;span class="p">?,&lt;/span> &lt;span class="n">intent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">?)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Action to be perfomed placed here
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">context&lt;/span>&lt;span class="o">?.&lt;/span>&lt;span class="n">startActivity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">intent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>In the &lt;code>oncreate()&lt;/code> function of the &lt;code>MainActivity&lt;/code> add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">onCreate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">savedInstanceState&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Bundle&lt;/span>&lt;span class="p">?)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">super&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">onCreate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">savedInstanceState&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">setContentView&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">layout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">activity_main&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">createNotificationChannel&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowPendingNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowPendingNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowActionNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowActionNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">basicNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowPendingNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pendingNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowActionNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Checks the android version
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SDK_INT&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">actionsNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="user-interface">User interface&lt;/h4>
+&lt;p>In the &lt;code>activity_main.xml&lt;/code> file add the code snippet below. There are three buttons in the XML design below. The first button fires up the basic notification, the second button fires up the pending intent notification, and the last button fires the action button notification.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;androidx.constraintlayout.widget.ConstraintLayout&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:android=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:app=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:tools=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;match_parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;match_parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">tools:context=&lt;/span>&lt;span class="s">&amp;#34;.MainActivity&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Basic Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Pending Intent Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowActionNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowNotification&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowActionNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Action Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/androidx.constraintlayout.widget.ConstraintLayout&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="conclusion">Conclusion&lt;/h3>
+&lt;p>Now that you understand how notifications work, implement a push notification using firebase cloud messaging. Full source code for the application we have built can be downloaded from &lt;a class="link" href="https://github.com/paulodhiambo/Notification" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;p>To read more on the notification anatomy visit the &lt;a class="link" href="https://developer.android.com/guide/topics/ui/notifiers/notifications#Templates" target="_blank" rel="noopener"
+>Android documentation&lt;/a>.&lt;/p>
+&lt;p>Happy coding.&lt;/p></description></item></channel></rss>

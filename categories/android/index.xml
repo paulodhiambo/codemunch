@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Android on The Codemunch</title><link>/categories/android/</link><description>Recent content in Android on The Codemunch</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 04 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/android/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting Started with Android Notifications</title><link>/p/android-notifitions/</link><pubDate>Sat, 04 Jun 2022 00:00:00 +0000</pubDate><guid>/p/android-notifitions/</guid><description>&lt;img src="/p/android-notifitions/hero.jpeg" alt="Featured image of post Getting Started with Android Notifications" />&lt;p>A notification is a message widget that is displayed outside the applications user interface. When a notification is issued, it appears as an icon in the notification area. To view the details of the notification, the user opens the notification drawer.&lt;/p>
+&lt;h3 id="android-notifications">Android notifications&lt;/h3>
+&lt;h3 id="prerequisites">Prerequisites&lt;/h3>
+&lt;p>To follow this tutorial along ensure you have the following:&lt;/p>
+&lt;ol>
+&lt;li>&lt;a class="link" href="https://developer.android.com/studio" target="_blank" rel="noopener"
+>Android Studio&lt;/a> installed on your computer.&lt;/li>
+&lt;li>Some knowledge of &lt;a class="link" href="https://kotlinlang.org/docs/home.html" target="_blank" rel="noopener"
+>Kotlin&lt;/a> programming language.&lt;/li>
+&lt;li>Some knowledge of &lt;a class="link" href="https://kotlinlang.org/docs/android-overview.html" target="_blank" rel="noopener"
+>Android&lt;/a> app development.&lt;/li>
+&lt;/ol>
+&lt;h3 id="application-setup">Application setup&lt;/h3>
+&lt;p>Start Android studio and create a new Android project with an empty activity template.&lt;/p>
+&lt;p>&lt;img src="../../engineering-education/getting-started-android-notifications/android.png"
+loading="lazy"
+alt="Android studio new project"
+>&lt;/p>
+&lt;h3 id="creating-and-sending-notifications">Creating and sending notifications&lt;/h3>
+&lt;h4 id="basic-notification">Basic notification&lt;/h4>
+&lt;ul>
+&lt;li>Create a function with the name &lt;code>basicNotification&lt;/code>.&lt;/li>
+&lt;li>The function created above should have the code snippets below. The function creates a basic notification with an icon, title, and notification content.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-Kotlin" data-lang="Kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">basicNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Test notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Test Notification body&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>From the above code snippet:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>NotificationCompat.Builder(this, CHANNEL_ID)&lt;/code> takes in the context and the channel id. Channel id is required for notifications to work on Android 8.0 and later versions, channel id is used to manage notifications on the later Android versions.&lt;/li>
+&lt;li>&lt;code>setSmallIcon(R.drawable.notification_icon)&lt;/code> sets the notification icon that appears on the notification drawer.&lt;/li>
+&lt;li>&lt;code>setContentTitle(textTitle)&lt;/code> sets the title of the notification that is shown on the notification drawer.&lt;/li>
+&lt;li>&lt;code>setContentText(textContent)&lt;/code> sets the body of the notification.&lt;/li>
+&lt;li>&lt;code>setPriority(NotificationCompat.PRIORITY_DEFAULT)&lt;/code> sets how the Android system will notify the user of the notification based on the priority set, it works on Android 7.0 and below.&lt;/li>
+&lt;li>The code snippet below creates and shows the notification in the systems notification drawer.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="pending-intent-notification">Pending intent notification&lt;/h4>
+&lt;p>It is possible to add an intent to a notification such that whenever a user clicks on the notification it opens up an activity or fragment from a pending intent.
+To create a notification with a pending intent, create a function with the name &lt;code>pendingNotification&lt;/code> in the &lt;code>MainActivity.kt&lt;/code> and add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">pendingNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">intent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MainActivity&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">flags&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_NEW_TASK&lt;/span> &lt;span class="n">or&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_CLEAR_TASK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">pendingIntent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">PendingIntent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">PendingIntent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getActivity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">intent&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;My notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello World!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentIntent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pendingIntent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setAutoCancel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">true&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>The minor snippet below creates a pending intent that gets executed whenever the notification is clicked.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">&lt;span class="k">val&lt;/span> &lt;span class="py">intent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MainActivity&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">flags&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_NEW_TASK&lt;/span> &lt;span class="n">or&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FLAG_ACTIVITY_CLEAR_TASK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>.setContentIntent(pendingIntent)&lt;/code> attaches the pending intent created to the notification, this makes it possible for the notification to handle the pending intent operation.&lt;/li>
+&lt;/ul>
+&lt;h4 id="notification-with-action-button">Notification with action button&lt;/h4>
+&lt;p>Android system makes it possible to perform certain operations through notification action buttons i.e receive an incoming call, snooze an alarm through the notification buttons.&lt;/p>
+&lt;p>Notification actions were introduced with Android version 5.0, that&amp;rsquo;s the reason why we will annotate the function &lt;code>actionNotification&lt;/code> with the &lt;code>@RequiresApi(Build.VERSION_CODES.O)&lt;/code> annotation.&lt;/p>
+&lt;p>Create a function with the name &lt;code>actionNotification&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@RequiresApi&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">actionsNotification&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">snoozeIntent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MyBroadCastReceiver&lt;/span>&lt;span class="o">::&lt;/span>&lt;span class="k">class&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">java&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">action&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;snooze&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">putExtra&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">EXTRA_NOTIFICATION_ID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">snoozePendingIntent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">PendingIntent&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">PendingIntent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">getBroadcast&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">snoozeIntent&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">builder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Builder&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setSmallIcon&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">mipmap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_launcher&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentTitle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;My notification&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentText&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello World!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setPriority&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PRIORITY_DEFAULT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">setContentIntent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">snoozePendingIntent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">addAction&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">drawable&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ic_baseline_alarm_off_24&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;Snooze&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">snoozePendingIntent&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">with&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">NotificationManagerCompat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">from&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">notificationId&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">builder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">build&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>To perform an action from the notification, we will create a new kotlin class with the name &lt;code>MyBroadCastReceiver&lt;/code>. &lt;code>MyBroadCastReceiver&lt;/code> class extends the &lt;code>BroadCastReceiver&lt;/code> interface and implements the &lt;code>onReceive()&lt;/code> method of the &lt;code>BroadCastReceiver&lt;/code>interface.&lt;/p>
+&lt;h4 id="notification-channel">Notification channel&lt;/h4>
+&lt;p>Android version 8.0 and later versions require the notification channel for notification to be displayed on the notifications drawer.&lt;/p>
+&lt;p>It is through notification channels that the Android operating system manages notifications. Create a function with the name &lt;code>createNotificationChannel()&lt;/code> in the &lt;code>MainActivity&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">private&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">createNotificationChannel&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SDK_INT&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">name&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;test_notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">descriptionText&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s2">&amp;#34;test_notification_description&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">importance&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IMPORTANCE_DEFAULT&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">channel&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">NotificationChannel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CHANNEL_ID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">importance&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">apply&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">descriptionText&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">val&lt;/span> &lt;span class="py">notificationManager&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">NotificationManager&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">getSystemService&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Context&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">NOTIFICATION_SERVICE&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">NotificationManager&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">notificationManager&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">createNotificationChannel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">channel&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="broadcastreceiver">BroadCastReceiver&lt;/h4>
+&lt;p>In the project package, create a kotlin class with the name &lt;code>MyBroadCastReceiver&lt;/code> and add the code snippets below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.BroadcastReceiver&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.Context&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">import&lt;/span> &lt;span class="nn">android.content.Intent&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">MyBroadCastReceiver&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">BroadcastReceiver&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">onReceive&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Context&lt;/span>&lt;span class="p">?,&lt;/span> &lt;span class="n">intent&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Intent&lt;/span>&lt;span class="p">?)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Action to be perfomed placed here
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">context&lt;/span>&lt;span class="o">?.&lt;/span>&lt;span class="n">startActivity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">intent&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>In the &lt;code>oncreate()&lt;/code> function of the &lt;code>MainActivity&lt;/code> add the code snippet below.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-kotlin" data-lang="kotlin">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">override&lt;/span> &lt;span class="k">fun&lt;/span> &lt;span class="nf">onCreate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">savedInstanceState&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Bundle&lt;/span>&lt;span class="p">?)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">super&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">onCreate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">savedInstanceState&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">setContentView&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">layout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">activity_main&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">createNotificationChannel&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowPendingNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowPendingNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowActionNotification&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">findViewById&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">R&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">btnShowActionNotification&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">basicNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowPendingNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pendingNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">btnShowActionNotification&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">setOnClickListener&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//Checks the android version
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SDK_INT&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">Build&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">VERSION_CODES&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">O&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">actionsNotification&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="user-interface">User interface&lt;/h4>
+&lt;p>In the &lt;code>activity_main.xml&lt;/code> file add the code snippet below. There are three buttons in the XML design below. The first button fires up the basic notification, the second button fires up the pending intent notification, and the last button fires the action button notification.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;androidx.constraintlayout.widget.ConstraintLayout&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:android=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:app=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:tools=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;match_parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;match_parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">tools:context=&lt;/span>&lt;span class="s">&amp;#34;.MainActivity&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Basic Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Pending Intent Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toTopOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowActionNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowNotification&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:id=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowActionNotification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_width=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:layout_height=&lt;/span>&lt;span class="s">&amp;#34;wrap_content&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">android:text=&lt;/span>&lt;span class="s">&amp;#34;Show Action Notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintBottom_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintEnd_toEndOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintStart_toStartOf=&lt;/span>&lt;span class="s">&amp;#34;parent&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">app:layout_constraintTop_toBottomOf=&lt;/span>&lt;span class="s">&amp;#34;@+id/btnShowPendingNotification&amp;#34;&lt;/span> &lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/androidx.constraintlayout.widget.ConstraintLayout&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="conclusion">Conclusion&lt;/h3>
+&lt;p>Now that you understand how notifications work, implement a push notification using firebase cloud messaging. Full source code for the application we have built can be downloaded from &lt;a class="link" href="https://github.com/paulodhiambo/Notification" target="_blank" rel="noopener"
+>here&lt;/a>.&lt;/p>
+&lt;p>To read more on the notification anatomy visit the &lt;a class="link" href="https://developer.android.com/guide/topics/ui/notifiers/notifications#Templates" target="_blank" rel="noopener"
+>Android documentation&lt;/a>.&lt;/p>
+&lt;p>Happy coding.&lt;/p></description></item></channel></rss>
