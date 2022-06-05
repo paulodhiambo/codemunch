@@ -5,9 +5,9 @@ slug: spring-data-mongodb
 date: 2022-06-05 00:00:00+0000
 image: cover.jpeg
 categories:
-    - Example Category
+    - Spring Boot
 tags:
-    - Example Tag
+    - Spring Boot
 ---
 
 Spring Data MongoDB makes it possible to integrate a Spring Boot application with Mongo document database. It provides a `MongoRepository` containing all the methods used to perform MongoDB CRUD operations.
