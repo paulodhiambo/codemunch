@@ -3,7 +3,7 @@ title: Getting started with Spring Data MongoDB in Kotlin
 description: This tutorial will walk us through how to create a Spring Boot CRUD API in Kotlin and MongoDB, add fields `dateCreated` and `lastModified` in the `Todo` data class.
 slug: spring-data-mongodb
 date: 2022-06-05 00:00:00+0000
-image: cover.jpg
+image: cover.jpeg
 categories:
     - Example Category
 tags:
